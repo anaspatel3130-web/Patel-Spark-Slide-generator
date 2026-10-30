@@ -69,6 +69,14 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Ensure database tables and master administrator exist even in serverless environments
+try:
+    Base.metadata.create_all(bind=engine)
+    seed_administrator()
+except Exception:
+    pass
+
+
 # Enable CORS for local and networked clients
 app.add_middleware(
     CORSMiddleware,

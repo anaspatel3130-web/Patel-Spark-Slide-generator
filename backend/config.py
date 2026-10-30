@@ -14,18 +14,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 BACKEND_DIR = BASE_DIR / "backend"
 FRONTEND_DIR = BASE_DIR / "frontend"
 ASSETS_DIR = BACKEND_DIR / "assets"
-STORAGE_DIR = BACKEND_DIR / "storage"
+
+# Detect Vercel / Cloud Serverless read-only environment and route writable paths to /tmp
+IS_SERVERLESS = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+if IS_SERVERLESS:
+    STORAGE_DIR = Path("/tmp/patelspark_storage")
+    DEFAULT_DB_PATH = Path("/tmp/patelspark.db")
+else:
+    STORAGE_DIR = BACKEND_DIR / "storage"
+    DEFAULT_DB_PATH = BACKEND_DIR / "patelspark.db"
+
 UPLOAD_DIR = STORAGE_DIR / "uploads"
 GENERATED_DIR = STORAGE_DIR / "generated"
 
 # Ensure directories exist
-for directory in [UPLOAD_DIR, GENERATED_DIR, ASSETS_DIR]:
+for directory in [UPLOAD_DIR, GENERATED_DIR]:
     directory.mkdir(parents=True, exist_ok=True)
+if not IS_SERVERLESS:
+    ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Authorised UPS PowerPoint Assets (Strictly for PowerPoint Generation)
 UPS_LOGO_PATH = ASSETS_DIR / "ups_logo.png"
 UPS_WATERMARK_PATH = ASSETS_DIR / "ups_watermark.png"
-CUSTOM_TEMPLATE_PATH = ASSETS_DIR / "custom_template.pptx"
+CUSTOM_TEMPLATE_PATH = Path("/tmp/custom_template.pptx") if IS_SERVERLESS else (ASSETS_DIR / "custom_template.pptx")
 
 # Security Settings
 SECRET_KEY = os.getenv("SECRET_KEY", "patelspark-super-secret-key-change-in-production-2026")
@@ -33,7 +44,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
 # Database Configuration (SQLite default; can be overridden with PostgreSQL URL)
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BACKEND_DIR}/patelspark.db")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH}")
 
 # Default Administrator Credentials (Seeded on first startup)
 DEFAULT_ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@patelspark.internal")
