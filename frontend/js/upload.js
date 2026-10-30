@@ -355,6 +355,14 @@ const Upload = {
     }
   },
 
+  withAuthToken(url) {
+    if (!url) return "#";
+    const token = App.state.token;
+    if (!token) return url;
+    const sep = url.includes("?") ? "&" : "?";
+    return `${url}${sep}token=${encodeURIComponent(token)}`;
+  },
+
   async generatePresentation() {
     if (!App.state.currentFile) {
       App.showToast("Please upload an Excel workbook first.", "error");
@@ -404,8 +412,8 @@ const Upload = {
       this.displayGenerationResults(data);
       App.showToast(`Generated ${data.slide_count} slides + Formatted Excel workbook!`, "success");
 
-      // Trigger PowerPoint download automatically
-      window.location.href = data.download_url;
+      // Trigger PowerPoint download automatically with authenticated token
+      window.location.href = this.withAuthToken(data.download_url);
 
       this.loadHistory();
     } catch (err) {
@@ -432,13 +440,13 @@ const Upload = {
 
     const pptxBtn = document.getElementById("btn-download-pptx");
     if (pptxBtn && data.download_url) {
-      pptxBtn.href = data.download_url;
+      pptxBtn.href = this.withAuthToken(data.download_url);
     }
 
     const xlsxBtn = document.getElementById("btn-download-xlsx");
     if (xlsxBtn) {
       if (data.excel_download_url) {
-        xlsxBtn.href = data.excel_download_url;
+        xlsxBtn.href = this.withAuthToken(data.excel_download_url);
         xlsxBtn.style.display = "inline-flex";
       } else {
         xlsxBtn.style.display = "none";
@@ -458,8 +466,8 @@ const Upload = {
     }
 
     const excelVal = report.excel_validation || {};
-    const sheetsRetained = excelVal.original_sheets_retained !== false ? "100% Retained" : "Pending Export";
-    const valuesPreserved = excelVal.values_preserved !== false ? "100% Preserved" : "Pending Export";
+    const sheetsRetained = excelVal.original_sheets_retained !== false ? "Verified Retained" : "Pending Export";
+    const valuesPreserved = excelVal.values_preserved !== false ? "Verified Unchanged" : "Pending Export";
     const wsIncluded = (report.worksheets_included || []).join(", ") || "Active Sheet";
     const recordsRep = `${report.records_represented ?? 0} / ${report.total_source_records ?? 0} Rows`;
     const calcCount = (report.calculations_performed || []).length;
@@ -478,7 +486,7 @@ const Upload = {
              <strong style="color:var(--color-primary);">🤖 ${this.escapeHtml(agentPipe.orchestrator || "Multi-Agent Verification Pipeline")}:</strong>
              <span style="margin-left:0.35rem;">${(agentPipe.agents_executed || []).map(a => `✅ ${this.escapeHtml(a.name)}`).join("  •  ")}</span>
            </div>
-           <span class="category-badge highlight">Zero Hallucinations Verified</span>
+           <span class="category-badge highlight">Source-Backed Audit Passed</span>
          </div>`
       : "";
 
@@ -539,7 +547,7 @@ const Upload = {
             <td style="font-size:0.8rem; color:var(--text-secondary);">${dateStr}</td>
             <td>
               <div style="display:flex; gap:0.4rem; align-items:center;">
-                <a href="${item.download_url}" class="btn btn-primary btn-sm" download>
+                <a href="${this.withAuthToken(item.download_url)}" class="btn btn-primary btn-sm" download>
                   📥 Download
                 </a>
                 <button type="button" class="btn btn-outline btn-sm btn-delete-history" data-id="${item.id}" data-title="${this.escapeHtml(item.title)}" title="Delete this presentation and remove files">

@@ -132,6 +132,16 @@ async def upload_corporate_template(
         )
 
     content = await file.read()
+    if len(content) > 25 * 1024 * 1024:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Template exceeds maximum allowed size of 25MB."
+        )
+    if len(content) < 4 or not content.startswith(b"PK\x03\x04"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid .pptx binary signature. Please upload a valid OpenXML PowerPoint file."
+        )
     with open(CUSTOM_TEMPLATE_PATH, "wb") as f:
         f.write(content)
 

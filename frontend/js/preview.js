@@ -84,7 +84,7 @@ const Preview = {
             Quality Warnings: <strong>${warnCount}</strong>
           </span>
         </div>
-        <span class="category-badge highlight">${agentVerified ? "🤖 Fact-Locked • Zero Hallucinations" : "100% Source Fidelity"}</span>
+        <span class="category-badge highlight">${agentVerified ? "🤖 Fact-Checked • Source Verified" : "Source Validated"}</span>
       </div>
     `;
   },

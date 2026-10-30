@@ -24,6 +24,7 @@ class PresentationPlannerService:
     """
 
     MAX_AUTO_SLIDES = 6
+    MAX_COMPLETE_SLIDES = 25
 
     def __init__(
         self,
@@ -84,8 +85,9 @@ class PresentationPlannerService:
         include_charts_tables = bool(merged_options.get("include_charts_tables", True))
         include_routing_flows = bool(merged_options.get("include_routing_flows", True))
         include_remarks_exceptions = bool(merged_options.get("include_remarks_exceptions", True))
+        default_table_cap = 15 if (detail_level == "complete" or include_full_data_tables) else 2
         max_table_slides_per_sheet = int(
-            merged_options.get("max_table_slides_per_sheet", 2)
+            merged_options.get("max_table_slides_per_sheet", default_table_cap)
         )
 
         has_multiple_sheets = bool(active_multi_sheet and len(active_multi_sheet) > 1)
@@ -123,7 +125,11 @@ class PresentationPlannerService:
             return slides
 
         # Case B: Adaptive / Auto / Complete Data Preservation / Multi-Sheet Mode
-        # Strictly capped at MAX_AUTO_SLIDES (6 slides maximum) so Auto mode is 5-6 slides.
+        effective_max_slides = (
+            self.MAX_COMPLETE_SLIDES
+            if (detail_level == "complete" or include_full_data_tables)
+            else self.MAX_AUTO_SLIDES
+        )
         return self._plan_adaptive_slides(
             active_multi_sheet=active_multi_sheet,
             include_charts_tables=include_charts_tables,
@@ -132,7 +138,7 @@ class PresentationPlannerService:
             include_full_data_tables=include_full_data_tables,
             max_table_slides_per_sheet=max_table_slides_per_sheet,
             detail_level=detail_level,
-            max_total_slides=self.MAX_AUTO_SLIDES,
+            max_total_slides=effective_max_slides,
         )
 
     # ----------------- Case A: Standard 2..6 Slide Count Blueprints -----------------
@@ -348,7 +354,8 @@ class PresentationPlannerService:
         # Always prepare verbatim source data table slides so complete Excel data is represented
         for sheet_name, s_analysis in sheet_entries:
             chunks = s_analysis.get("full_table_chunks") or self._build_fallback_chunks(sheet_name, s_analysis)
-            selected_chunks = chunks[: max(1, min(2, max_table_slides_per_sheet))]
+            chunk_limit = max_table_slides_per_sheet if (detail_level == "complete" or include_full_data_tables) else min(2, max_table_slides_per_sheet)
+            selected_chunks = chunks[: max(1, chunk_limit)]
             for idx, chunk in enumerate(selected_chunks, start=1):
                 table_candidates.append(
                     self._create_full_data_table_slide(
@@ -360,23 +367,23 @@ class PresentationPlannerService:
                     )
                 )
 
-        # Assemble balanced body slides within the strict 5-6 slide budget (max_body_slides = 3)
+        # Assemble balanced body slides within the slide budget
         selected_body: List[Dict[str, Any]] = []
 
-        if include_full_data_tables and table_candidates:
-            # Reserve at least 1 slot for the verbatim source data table slide
-            if chart_candidates:
-                selected_body.append(chart_candidates.pop(0))
-            if flow_candidates and len(selected_body) < max_body_slides - 1:
-                selected_body.append(flow_candidates.pop(0))
-            elif chart_candidates and len(selected_body) < max_body_slides - 1:
-                selected_body.append(chart_candidates.pop(0))
-            elif remark_candidates and len(selected_body) < max_body_slides - 1:
-                selected_body.append(remark_candidates.pop(0))
-
-            # Add verbatim source data table slide(s) in remaining body slots
-            while table_candidates and len(selected_body) < max_body_slides:
-                selected_body.append(table_candidates.pop(0))
+        if (detail_level == "complete" or include_full_data_tables) and table_candidates:
+            # In Complete Data Preservation mode, include primary analytical views + all paginated source table chunks
+            for item in chart_candidates:
+                if len(selected_body) < max_body_slides - len(table_candidates):
+                    selected_body.append(item)
+            for item in flow_candidates:
+                if len(selected_body) < max_body_slides - len(table_candidates):
+                    selected_body.append(item)
+            for item in remark_candidates:
+                if len(selected_body) < max_body_slides - len(table_candidates):
+                    selected_body.append(item)
+            for item in table_candidates:
+                if len(selected_body) < max_body_slides:
+                    selected_body.append(item)
         else:
             for pool in (chart_candidates, flow_candidates, remark_candidates, table_candidates):
                 for item in pool:

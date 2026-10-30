@@ -126,19 +126,47 @@ def test_full_api_workflow():
         print(f" [OK] Formatted Excel Output Compiled (Download URL: {excel_download_url})")
         print(f" [OK] Cross-Validation Report Verified (Status: {gen_data['validation_report']['overall_status']})")
 
-        # 9. Verify PowerPoint download endpoint returns valid binary file
-        res = client.get(download_url)
+        # 9. Verify unauthenticated download is blocked (401) and authenticated download succeeds
+        unauth_res = client.get(download_url)
+        assert unauth_res.status_code == 401
+        res = client.get(download_url, headers=user_headers)
         assert res.status_code == 200
         assert "application/vnd.openxmlformats" in res.headers["content-type"]
         assert len(res.content) > 5000
-        print(f" [OK] PowerPoint Download Verified ({len(res.content)} bytes)")
+        print(f" [OK] Authenticated PowerPoint Download & Ownership Guard Verified ({len(res.content)} bytes)")
 
-        # 10. Verify Formatted Excel download endpoint returns valid binary file
-        res = client.get(excel_download_url)
+        # 10. Verify Formatted Excel download endpoint with query token auth
+        res = client.get(f"{excel_download_url}?token={user_token}")
         assert res.status_code == 200
         assert "application/vnd.openxmlformats" in res.headers["content-type"]
         assert len(res.content) > 2000
         print(f" [OK] Formatted Excel (.xlsx) Download Verified ({len(res.content)} bytes)")
+
+        # 10b. Verify Complete Data Preservation mode & invalid file rejection
+        bad_res = client.post(
+            "/api/excel/upload",
+            headers=user_headers,
+            files={"file": ("corrupt.xlsx", b"NOT_A_VALID_ZIP_HEADER", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+        )
+        assert bad_res.status_code == 400
+        print(" [OK] Invalid Magic-Byte Upload Rejection Verified (HTTP 400)")
+
+        comp_res = client.post(
+            "/api/generator/preview",
+            headers=user_headers,
+            json={
+                "file_id": file_id,
+                "sheet_name": active_sheet,
+                "slide_count": 0,
+                "slide_mode": "auto",
+                "detail_level": "complete",
+                "include_full_data_tables": True,
+            }
+        )
+        assert comp_res.status_code == 200
+        comp_plan = comp_res.json()
+        assert any(s["layout_type"] == "full_data_table" for s in comp_plan["slides"])
+        print(f" [OK] Complete Data Preservation Mode Verified ({comp_plan['actual_slides']} slides with paginated source tables)")
 
         # 11. Verify Delete / Cancel generated presentation endpoint
         res = client.get("/api/generator/history", headers=user_headers)

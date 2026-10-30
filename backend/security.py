@@ -108,21 +108,24 @@ def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
 # ----------------- FastAPI Auth & RBAC Dependencies -----------------
 
 def get_current_user(
+    request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_bearer),
     db: Session = Depends(get_db)
 ) -> User:
     """
-    Dependency that enforces authentication. Resolves user from Bearer token.
+    Dependency that enforces authentication. Resolves user from Bearer token
+    or from `?token=` query parameter (for secure browser file downloads).
     Raises 401 if credentials are missing, invalid, or expired.
     """
-    if not credentials:
+    raw_token = credentials.credentials if credentials else request.query_params.get("token")
+    if not raw_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication token is missing. Please log in.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    payload = decode_access_token(credentials.credentials)
+    payload = decode_access_token(raw_token)
     if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

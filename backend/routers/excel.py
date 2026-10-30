@@ -35,7 +35,7 @@ async def upload_excel(
             detail=f"Unsupported file format '{ext}'. Only .xlsx and .xls Excel workbooks are supported."
         )
 
-    file_id = str(uuid.uuid4())
+    file_id = f"u{current_user.id}_{uuid.uuid4().hex}"
     stored_path = UPLOAD_DIR / f"{file_id}{ext}"
 
     # Read and check size

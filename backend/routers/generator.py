@@ -66,9 +66,17 @@ def _get_validator_service():
     return ValidationService
 
 
-def _find_upload_file(file_id: str) -> Path:
+def _find_upload_file(file_id: str, current_user: Optional[User] = None) -> Path:
+    safe_id = Path(file_id).name
+    if current_user and current_user.role != "admin" and safe_id.startswith("u"):
+        expected_prefix = f"u{current_user.id}_"
+        if not safe_id.startswith(expected_prefix):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access denied: You do not have permission to access another user's uploaded file."
+            )
     for ext in [".xlsx", ".xls"]:
-        p = UPLOAD_DIR / f"{file_id}{ext}"
+        p = UPLOAD_DIR / f"{safe_id}{ext}"
         if p.exists():
             return p
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Uploaded file session expired or not found.")
@@ -179,7 +187,7 @@ def preview_presentation_plan(
     Computes data analysis and produces the slide blueprint without generating the PPTX binary.
     Enables instant interactive preview in the browser.
     """
-    filepath = _find_upload_file(req.file_id)
+    filepath = _find_upload_file(req.file_id, current_user)
     parser = ExcelParserService(filepath)
     inspection = parser.inspect_workbook()
 
@@ -234,7 +242,7 @@ def create_presentation(
     Renders and compiles the presentation into a downloadable .pptx file
     and a professionally formatted .xlsx workbook with cross-validation.
     """
-    filepath = _find_upload_file(req.file_id)
+    filepath = _find_upload_file(req.file_id, current_user)
     parser = ExcelParserService(filepath)
     inspection = parser.inspect_workbook()
 
@@ -311,11 +319,25 @@ def create_presentation(
 
 
 @router.get("/download/{filename}")
-def download_presentation(filename: str):
+def download_presentation(
+    filename: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
-    Securely serves the generated PowerPoint file for download.
+    Securely serves the generated PowerPoint file for download after verifying
+    user ownership (or administrator role).
     """
     safe_filename = Path(filename).name
+    record = db.query(PresentationRecord).filter(
+        PresentationRecord.pptx_filename == safe_filename
+    ).first()
+    if record and record.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: You do not have permission to download this presentation."
+        )
+
     file_path = GENERATED_DIR / safe_filename
 
     if not file_path.exists():
@@ -333,11 +355,26 @@ def download_presentation(filename: str):
 
 
 @router.get("/download-excel/{filename}")
-def download_formatted_excel(filename: str):
+def download_formatted_excel(
+    filename: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
-    Securely serves the generated formatted Excel workbook (.xlsx) for download.
+    Securely serves the generated formatted Excel workbook (.xlsx) for download
+    after verifying user ownership (or administrator role).
     """
     safe_filename = Path(filename).name
+    paired_pptx = safe_filename.replace("Formatted_Workbook_", "Presentation_").replace(".xlsx", ".pptx")
+    record = db.query(PresentationRecord).filter(
+        PresentationRecord.pptx_filename == paired_pptx
+    ).first()
+    if record and record.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: You do not have permission to download this workbook."
+        )
+
     file_path = GENERATED_DIR / safe_filename
 
     if not file_path.exists():
@@ -434,9 +471,24 @@ def cancel_and_delete_file(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Cancels or removes a generated file by its filename immediately after download.
+    Cancels or removes a generated file by its filename immediately after download,
+    enforcing user ownership.
     """
     safe_name = Path(filename).name
+    lookup_pptx = (
+        safe_name
+        if safe_name.endswith(".pptx")
+        else safe_name.replace("Formatted_Workbook_", "Presentation_").replace(".xlsx", ".pptx")
+    )
+    record = db.query(PresentationRecord).filter(
+        PresentationRecord.pptx_filename == lookup_pptx
+    ).first()
+    if record and record.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: You cannot delete another user's generated presentation."
+        )
+
     target_path = GENERATED_DIR / safe_name
     if target_path.exists():
         try:
@@ -453,11 +505,6 @@ def cancel_and_delete_file(
             except Exception:
                 pass
 
-    # Clean up corresponding database record if exists
-    record = db.query(PresentationRecord).filter(
-        PresentationRecord.pptx_filename == safe_name,
-        PresentationRecord.user_id == current_user.id
-    ).first()
     if record:
         db.delete(record)
         db.commit()

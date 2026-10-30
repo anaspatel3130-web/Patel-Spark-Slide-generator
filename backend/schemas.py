@@ -127,7 +127,7 @@ class PresentationPlanResponse(BaseModel):
 class GeneratePresentationRequest(BaseModel):
     file_id: str
     sheet_name: Optional[str] = None
-    slide_count: int = Field(default=4, ge=0, le=6)
+    slide_count: int = Field(default=4, ge=0, le=30)
     custom_title: Optional[str] = None
     selected_sheets: Optional[List[str]] = None
     slide_mode: str = "manual"

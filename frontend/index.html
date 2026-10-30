@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patel'Spark — Automation Slide Generator</title>
   <link rel="icon" type="image/png" href="/assets/patelspark_banner.png">
-  <link rel="stylesheet" href="/css/variables.css?v=2026.7">
-  <link rel="stylesheet" href="/css/base.css?v=2026.7">
-  <link rel="stylesheet" href="/css/components.css?v=2026.7">
-  <link rel="stylesheet" href="/css/dashboard.css?v=2026.7">
+  <link rel="stylesheet" href="/css/variables.css?v=2026.8">
+  <link rel="stylesheet" href="/css/base.css?v=2026.8">
+  <link rel="stylesheet" href="/css/components.css?v=2026.8">
+  <link rel="stylesheet" href="/css/dashboard.css?v=2026.8">
 </head>
 <body>
 
@@ -97,13 +97,13 @@
         </div>
         <div class="feature-card">
           <div class="feature-icon">🎯</div>
-          <h3 class="feature-title">Deterministic Accuracy</h3>
-          <p class="feature-text">100% verified Python aggregations. Computes exact totals, averages, and rankings derived directly from your uploaded Excel workbook.</p>
+          <h3 class="feature-title">Deterministic Calculations</h3>
+          <p class="feature-text">Vectorized Python aggregations compute totals, averages, shares, and rankings directly from your uploaded Excel workbook with traceable formulas.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">⚡</div>
-          <h3 class="feature-title">Precision 2 to 6 Slides</h3>
-          <p class="feature-text">Select concise 2-slide briefings, standard 4-slide reviews, or Auto Adaptive 5–6 slide executive decks in native 16:9 widescreen PowerPoint.</p>
+          <h3 class="feature-title">Summary &amp; Complete Modes</h3>
+          <p class="feature-text">Choose concise 2–6 slide Management Summaries or Complete Data Preservation mode with paginated 16:9 source data tables.</p>
         </div>
       </div>
 
@@ -121,7 +121,7 @@
             <div class="guide-step-num">1</div>
             <div class="guide-step-content">
               <h4 class="guide-step-title">Sign In or Request Access</h4>
-              <p class="guide-step-desc">Click <strong>"Sign In"</strong> (use the 1-click <em>Master Admin Demo</em> button for instant testing) or submit an access request for approval.</p>
+              <p class="guide-step-desc">Click <strong>"Sign In"</strong> with your authorized account or submit an access request for administrator approval.</p>
             </div>
           </div>
           <div class="guide-step-card">
@@ -184,9 +184,9 @@
           </div>
           <div class="hud-stat-item accuracy-item">
             <div class="hud-stat-val" style="color:#10b981; display:flex; align-items:center; gap:0.35rem;">
-              <span class="pulse-dot"></span> 100%
+              <span class="pulse-dot"></span> Active
             </div>
-            <div class="hud-stat-lbl">Deterministic Accuracy</div>
+            <div class="hud-stat-lbl">Cross-Validation Engine</div>
           </div>
         </div>
 
@@ -290,11 +290,11 @@
               <div class="detail-mode-card" data-detail="complete">
                 <div class="detail-mode-header">
                   <span class="detail-mode-icon">🛡️</span>
-                  <span class="detail-mode-title">Complete Data Preservation (Full Tables &amp; Details)</span>
-                  <span class="detail-mode-badge">100% Fidelity</span>
+                  <span class="detail-mode-title">Complete Data Preservation (Full Tables &amp; Appendix)</span>
+                  <span class="detail-mode-badge">Source Tables</span>
                 </div>
                 <div class="detail-mode-desc">
-                  Preserves complete Excel rows in paginated slide tables, plus Origin → Transit → Destination flows and operational remarks.
+                  Preserves complete Excel rows across paginated 10-row slide tables, plus Origin → Transit → Destination flows and operational remarks.
                 </div>
               </div>
             </div>
@@ -306,7 +306,7 @@
             <div class="slide-count-options" id="slide-count-options">
               <div class="slide-count-btn" data-slides="0">
                 <div class="slide-count-number">Auto</div>
-                <div class="slide-count-desc">Smart 5–6 Slides (Zero Hallucination)</div>
+                <div class="slide-count-desc">Adaptive (5–6 Summary / Paginated Complete)</div>
               </div>
               <div class="slide-count-btn" data-slides="2">
                 <div class="slide-count-number">2</div>
@@ -586,18 +586,14 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label" for="login-email">Email Address</label>
-            <input type="email" id="login-email" class="form-control" required placeholder="admin@patelspark.internal">
+            <input type="email" id="login-email" class="form-control" required placeholder="name@company.com">
           </div>
           <div class="form-group">
             <label class="form-label" for="login-password">Password</label>
             <input type="password" id="login-password" class="form-control" required placeholder="••••••••">
           </div>
-          <!-- Quick Testing Shortcut Pills -->
-          <div style="background-color: var(--bg-canvas); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px dashed var(--border-subtle); margin-top: 1rem;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.35rem;">TEST CREDENTIAL SHORTCUT:</div>
-            <button type="button" class="btn btn-outline btn-sm" id="btn-fill-admin-creds" style="font-size: 0.75rem;">
-              Fill Master Admin Credentials
-            </button>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); background-color: var(--bg-canvas); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-top: 0.75rem;">
+            🔒 Authorized users &amp; administrators only. Need an account? Click <strong>Request Access</strong> or activate an approved invitation token below.
           </div>
         </div>
         <div class="modal-footer">
@@ -711,10 +707,10 @@
             <div class="guide-step-content">
               <h4 class="guide-step-title">Authentication &amp; Platform Access</h4>
               <p class="guide-step-desc">
-                Click <strong>"Sign In"</strong> in the top navigation bar. For demonstration and administration, click the <em>"Fill Master Admin Credentials"</em> shortcut button to instantly populate <code>admin@patelspark.internal</code> and access the dashboard.
+                Click <strong>"Sign In"</strong> in the top navigation bar and enter your authorized account credentials to access the presentation studio.
               </p>
               <div class="guide-callout">
-                💡 <strong>New Users:</strong> Click <em>"Request Access"</em> to submit your operational credentials. Once approved by the administrator, activate your account via the invitation token.
+                💡 <strong>New Users:</strong> Click <em>"Request Access"</em> to submit your operational details. Once approved by an administrator, activate your account using your single-use invitation token.
               </div>
             </div>
           </div>
@@ -811,11 +807,11 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="/js/app.js?v=2026.7"></script>
-  <script src="/js/auth.js?v=2026.7"></script>
-  <script src="/js/admin.js?v=2026.7"></script>
-  <script src="/js/upload.js?v=2026.7"></script>
-  <script src="/js/preview.js?v=2026.7"></script>
-  <script src="/js/gamification.js?v=2026.7"></script>
+  <script src="/js/app.js?v=2026.8"></script>
+  <script src="/js/auth.js?v=2026.8"></script>
+  <script src="/js/admin.js?v=2026.8"></script>
+  <script src="/js/upload.js?v=2026.8"></script>
+  <script src="/js/preview.js?v=2026.8"></script>
+  <script src="/js/gamification.js?v=2026.8"></script>
 </body>
 </html>

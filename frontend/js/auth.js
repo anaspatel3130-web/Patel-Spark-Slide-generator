@@ -10,14 +10,6 @@ const Auth = {
   },
 
   bindEvents() {
-    // Fill Master Admin Shortcut
-    document.getElementById("btn-fill-admin-creds")?.addEventListener("click", () => {
-      const emailInput = document.getElementById("login-email");
-      const passInput = document.getElementById("login-password");
-      if (emailInput) emailInput.value = "admin@patelspark.internal";
-      if (passInput) passInput.value = "PatelSpark2026!Admin";
-    });
-
     // Open Activation from Login modal
     document.getElementById("btn-open-activation-from-login")?.addEventListener("click", () => {
       App.closeModal("modal-login");
