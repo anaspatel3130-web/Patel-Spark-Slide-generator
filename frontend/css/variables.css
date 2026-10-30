@@ -1,0 +1,92 @@
+/* frontend/css/variables.css - Patel'Spark Brand Design Tokens (Naturally Eye-Comfort Tuned) */
+/* Strictly independent from the PowerPoint generator design system */
+:root {
+  /* Core Patel'Spark Palette (Softened Slate Navy + Warm Amber/Orange) */
+  --color-primary: #1e293b;       /* Softened Deep Slate Navy (Zero Harsh Black) */
+  --color-primary-dark: #0f172a;  /* Midnight Navy */
+  --color-primary-light: #334155; /* Card Surface Slate Navy */
+  
+  --color-accent: #e05d10;        /* Warm Eye-Comfort Spark Orange (Low Glare) */
+  --color-accent-hover: #c2410c;  /* Deep Warm Spark Orange */
+  --color-accent-light: #f9f3eb;  /* Soft Warm Parchment Spark Tint */
+  --color-accent-border: #f3d1b0; /* Warm Soft Spark Border */
+  --color-spark-gold: #f59e0b;    /* Spark Amber Highlight */
+  
+  --color-slate: #475569;         /* Comfortable Slate Neutral */
+  --color-slate-light: #64748b;   /* Mid Slate */
+  --color-slate-dark: #334155;    /* Dark Charcoal Slate */
+
+  /* Component token aliases mapped to Patel'Spark palette */
+  --ups-brown: var(--color-primary);
+  --ups-brown-dark: var(--color-primary-dark);
+  --ups-brown-light: var(--color-primary-light);
+  --ups-gold: var(--color-accent);
+  --ups-gold-hover: var(--color-accent-hover);
+  --ups-gold-light: var(--color-accent-light);
+  --text-gold: var(--color-spark-gold);
+  
+  /* Naturally Eye-Comfort Surfaces (Warm Paper/Stone — Zero Pure #FFFFFF Glare) */
+  --bg-canvas: #e9eef4;           /* Soothing Warm Slate-Stone Canvas */
+  --bg-surface: #f4f6f9;          /* Soft Low-Glare Paper Card Surface */
+  --bg-surface-elevated: #f8fafc; /* Gentle Elevated Surface */
+  --border-light: #d5dee8;        /* Soft Diffused Border */
+  --border-subtle: #c3cfd9;       /* Muted Control Border */
+  
+  /* Ergonomic Reading Typography Contrast */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #f8fafc;
+  
+  /* Status & Accents */
+  --color-success: #059669;
+  --color-success-bg: #e6f4ee;
+  --color-warning: #d97706;
+  --color-warning-bg: #fbf3e4;
+  --color-danger: #dc2626;
+  --color-danger-bg: #faeaea;
+  --color-info: #0284c7;
+  --color-info-bg: #e8f4fa;
+
+  /* Soft Diffused Elevation Shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 22px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 28px -6px rgba(15, 23, 42, 0.12), 0 10px 10px -5px rgba(15, 23, 42, 0.03);
+  --shadow-gold: 0 0 14px rgba(224, 93, 16, 0.26);
+
+  /* Radius & Transitions */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Eye-Comfort Dark / Low-Blue-Light Night Mode */
+body.eye-comfort-dark {
+  --color-primary: #e2e8f0;
+  --color-primary-dark: #090d16;
+  --color-primary-light: #1e293b;
+  --color-accent: #fb923c;
+  --color-accent-hover: #f97316;
+  --color-accent-light: rgba(251, 146, 60, 0.14);
+  --color-accent-border: rgba(251, 146, 60, 0.35);
+
+  --bg-canvas: #0d1424;
+  --bg-surface: #151f33;
+  --bg-surface-elevated: #1e293b;
+  --border-light: #26334d;
+  --border-subtle: #334155;
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #f8fafc;
+
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
+  --color-info-bg: rgba(2, 132, 199, 0.15);
+}

@@ -1,0 +1,217 @@
+/* frontend/css/base.css - Reset & Patel'Spark Global Layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+/* Header & Navigation */
+.navbar {
+  background: linear-gradient(90deg, #090d16 0%, #0f172a 60%, #1e293b 100%);
+  color: var(--text-inverse);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  border-bottom: 3px solid var(--color-accent);
+}
+
+.navbar .nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 82px;
+}
+
+.brand-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: var(--text-inverse);
+  transition: transform 0.25s ease;
+}
+
+.brand-logo-group:hover {
+  transform: translateY(-1px);
+}
+
+.brand-logo-img {
+  height: 60px;
+  width: auto;
+  border-radius: 10px;
+  object-fit: contain;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  padding: 3px 8px;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid #f59e0b;
+  transition: all 0.3s ease;
+}
+
+.brand-logo-group:hover .brand-logo-img {
+  box-shadow: 0 0 26px rgba(245, 158, 11, 0.85), 0 0 12px rgba(249, 115, 22, 0.65);
+  transform: scale(1.04);
+}
+
+.brand-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.brand-name span {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 50%, #facc15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.45));
+}
+
+.brand-subtitle {
+  font-size: 0.74rem;
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-weight: 800;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-link {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: var(--color-spark-gold);
+}
+
+/* User Profile Badge */
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.role-pill {
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-spark-gold) 100%);
+  color: #ffffff;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* Main Content Area */
+main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+/* Footer */
+.footer {
+  background-color: var(--color-primary-dark);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 1.75rem 0;
+  border-top: 2px solid rgba(249, 115, 22, 0.25);
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-logo-img {
+  height: 40px;
+  width: auto;
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 2px 6px;
+  border: 1.5px solid #f59e0b;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.45);
+}
+
+.footer-tagline {
+  color: #cbd5e1;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.author-radium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #eaff00;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  background: rgba(234, 255, 0, 0.1);
+  border: 1px solid rgba(234, 255, 0, 0.55);
+  padding: 0.28rem 0.85rem;
+  border-radius: 9999px;
+  text-shadow: 0 0 8px rgba(234, 255, 0, 0.85), 0 0 18px rgba(204, 255, 0, 0.5);
+  box-shadow: 0 0 14px rgba(234, 255, 0, 0.25), inset 0 0 8px rgba(234, 255, 0, 0.12);
+}

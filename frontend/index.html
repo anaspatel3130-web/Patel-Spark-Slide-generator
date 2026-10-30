@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patel'Spark — Automation Slide Generator</title>
+  <link rel="icon" type="image/png" href="/assets/patelspark_banner.png">
+  <link rel="stylesheet" href="/css/variables.css?v=2026.7">
+  <link rel="stylesheet" href="/css/base.css?v=2026.7">
+  <link rel="stylesheet" href="/css/components.css?v=2026.7">
+  <link rel="stylesheet" href="/css/dashboard.css?v=2026.7">
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Patel'Spark Branding) -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo-group" id="nav-brand-logo">
+        <img src="/assets/patelspark_banner.png" alt="Patel'Spark Logo" class="brand-logo-img">
+        <div class="brand-title">
+          <span class="brand-name">Patel’<span>Spark</span></span>
+          <span class="brand-subtitle">Automation Slide Generator</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#" class="nav-link" id="nav-btn-home">Overview</a>
+        <a href="#inpage-user-guide" class="nav-link" id="nav-btn-guide" onclick="if(window.App){App.openGuide(event);}">📖 How-To Guide</a>
+        <a href="#" class="nav-link" id="nav-btn-workspace" style="display: none;">Workspace</a>
+        <a href="#" class="nav-link" id="nav-btn-admin" style="display: none;">Admin Panel</a>
+
+        <!-- Eye-Comfort Mode Toggle -->
+        <button type="button" class="btn-eye-comfort" id="btn-toggle-eye-comfort" onclick="if(window.App){App.toggleEyeComfort();}" title="Switch between Warm Eye-Comfort Light and Low-Glare Night Mode">
+          <span id="eye-comfort-icon">🌙</span>
+          <span id="eye-comfort-label">Eye Comfort</span>
+        </button>
+        
+        <!-- Guest Controls -->
+        <div id="nav-guest-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+          <button class="btn btn-outline-gold btn-sm" id="btn-open-request-access">Request Access</button>
+          <button class="btn btn-primary btn-sm" id="btn-open-login">Sign In</button>
+        </div>
+
+        <!-- Authenticated Controls -->
+        <div id="nav-user-actions" style="display: none; align-items: center; gap: 1rem;">
+          <div class="user-profile-badge">
+            <span class="user-name" id="user-display-name">User</span>
+            <span class="role-pill" id="user-display-role">USER</span>
+          </div>
+          <button class="btn btn-outline btn-sm" id="btn-logout" style="color:#ffffff; border-color: rgba(255,255,255,0.3);">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- ================= VIEW 1: LANDING & OVERVIEW ================= -->
+    <section id="view-landing" class="view-section">
+      <!-- Hero Banner with Patel'Spark Logo Showcase -->
+      <div class="hero-section">
+        <div class="hero-glow"></div>
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-badge">✨ Patel'Spark Automation Engine</div>
+            <h1 class="hero-title">Transform Excel Workbooks into <span>Professional Presentations</span></h1>
+            <p class="hero-description">
+              Upload supported Excel workbooks, analyse business data, discover key insights and generate polished PowerPoint presentations automatically.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary btn-lg" id="hero-btn-request">Request Access</button>
+              <button class="btn btn-secondary btn-lg" id="hero-btn-login">Sign In to Dashboard</button>
+              <button class="btn btn-outline btn-lg" id="hero-btn-guide" onclick="if(window.App){App.openGuide(event);}" style="border-color: rgba(255,255,255,0.4); color: #ffffff;">📖 Step-by-Step Guide</button>
+            </div>
+          </div>
+
+          <div class="hero-logo-showcase">
+            <div class="hero-brand-card">
+              <img src="/assets/patelspark_logo.png" alt="Patel'Spark — Automation Slide Generator">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Highlights -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Schema-Agnostic Engine</h3>
+          <p class="feature-text">Handles diverse Excel formats without rigid column requirements. Automatically classifies numerical figures, categories, routes, and timelines.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">Automated Corporate Slides</h3>
+          <p class="feature-text">Compiles structured 16:9 widescreen PowerPoint decks with native editable charts, formatted tables, headers, footers, and watermarks.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Deterministic Accuracy</h3>
+          <p class="feature-text">100% verified Python aggregations. Computes exact totals, averages, and rankings derived directly from your uploaded Excel workbook.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Precision 2 to 6 Slides</h3>
+          <p class="feature-text">Select concise 2-slide briefings, standard 4-slide reviews, or Auto Adaptive 5–6 slide executive decks in native 16:9 widescreen PowerPoint.</p>
+        </div>
+      </div>
+
+      <!-- In-Page Step-by-Step User Guide Section (Always Accessible) -->
+      <div class="inpage-guide-section" id="inpage-user-guide">
+        <div class="inpage-guide-header">
+          <div>
+            <div style="font-size:0.75rem; font-weight:800; color:var(--color-accent); text-transform:uppercase; letter-spacing:0.08em;">Interactive Manual &amp; Walkthrough</div>
+            <h2 style="font-size:1.45rem; font-weight:800; color:var(--color-primary); margin-top:0.2rem;">📖 How to Use Patel'Spark — Step-by-Step User Guide</h2>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="if(window.App){App.openModal('modal-user-guide');}">Open Full Interactive Guide Modal</button>
+        </div>
+        <div class="inpage-guide-grid">
+          <div class="guide-step-card">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Sign In or Request Access</h4>
+              <p class="guide-step-desc">Click <strong>"Sign In"</strong> (use the 1-click <em>Master Admin Demo</em> button for instant testing) or submit an access request for approval.</p>
+            </div>
+          </div>
+          <div class="guide-step-card">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Upload Any Excel Workbook</h4>
+              <p class="guide-step-desc">Upload any <code>.xlsx</code> or <code>.xls</code> file or load a built-in sample. The engine inspects all sheets, headers, routes, and remarks automatically.</p>
+            </div>
+          </div>
+          <div class="guide-step-card">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Choose Auto (5–6 Slides) or Manual (2–6)</h4>
+              <p class="guide-step-desc">Pick <strong>Auto (5–6 Slides)</strong> for an intelligent executive deck + verbatim source table, or select 2 to 6 slides manually.</p>
+            </div>
+          </div>
+          <div class="guide-step-card">
+            <div class="guide-step-num">4</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Preview, Download &amp; Manage</h4>
+              <p class="guide-step-desc">Preview every 16:9 slide with zero hallucinations, download both <code>.pptx</code> and formatted <code>.xlsx</code>, or delete decks anytime.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: AUTHENTICATED WORKSPACE ================= -->
+    <section id="view-dashboard" class="view-section" style="display: none;">
+      <!-- Gamified Analyst Command Center Header -->
+      <div class="gamified-command-bar" id="gamified-command-bar">
+        <!-- Left: Level Badge & XP Progress -->
+        <div class="gamified-profile">
+          <div class="rank-avatar" id="gamified-rank-avatar">⚡</div>
+          <div class="rank-info">
+            <div class="rank-title-row">
+              <span class="rank-level" id="gamified-level-badge">LVL 1</span>
+              <span class="rank-title" id="gamified-rank-title">Data Trainee</span>
+            </div>
+            <div class="xp-bar-container">
+              <div class="xp-bar-fill" id="gamified-xp-fill" style="width: 25%;"></div>
+            </div>
+            <div class="xp-text" id="gamified-xp-text">150 / 250 XP to Insight Specialist</div>
+          </div>
+        </div>
+
+        <!-- Middle: Live Gamified Telemetry Metrics HUD -->
+        <div class="gamified-stats-hud">
+          <div class="hud-stat-item">
+            <div class="hud-stat-val" id="hud-stat-slides">0</div>
+            <div class="hud-stat-lbl">Slides Synthesized</div>
+          </div>
+          <div class="hud-stat-item">
+            <div class="hud-stat-val" id="hud-stat-sheets">0</div>
+            <div class="hud-stat-lbl">Sheets Analyzed</div>
+          </div>
+          <div class="hud-stat-item">
+            <div class="hud-stat-val" id="hud-stat-records">0</div>
+            <div class="hud-stat-lbl">Verified Records</div>
+          </div>
+          <div class="hud-stat-item accuracy-item">
+            <div class="hud-stat-val" style="color:#10b981; display:flex; align-items:center; gap:0.35rem;">
+              <span class="pulse-dot"></span> 100%
+            </div>
+            <div class="hud-stat-lbl">Deterministic Accuracy</div>
+          </div>
+        </div>
+
+            <!-- Right: Achievement Quick Trophies & Guide Shortcut -->
+        <div class="gamified-achievements" style="display:flex; align-items:center; gap:0.6rem;">
+          <button type="button" class="btn-achievements" onclick="if(window.App){App.openModal('modal-user-guide');}" title="Open Step-by-Step User Guide">
+            📖 User Guide
+          </button>
+          <button type="button" class="btn-achievements" id="btn-open-achievements" title="View Unlocked Achievements">
+            🏆 Badges <span class="badge-count-pill" id="gamified-badge-count">1/6</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <img src="/assets/patelspark_banner.png" alt="Patel'Spark" style="height: 54px; width: auto; border-radius: 8px; background: #ffffff; padding: 2px 6px; border: 2px solid #f59e0b; box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);">
+            <div>
+              <h2 class="card-title">Patel'Spark Presentation Studio</h2>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.15rem;">
+                Upload an Excel workbook to analyse metrics and generate a downloadable PowerPoint presentation.
+              </p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-outline btn-sm" id="btn-load-sample-1">Load Global Express Sample</button>
+            <button class="btn btn-outline btn-sm" id="btn-load-sample-2">Load Route Logistics Sample</button>
+          </div>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div class="upload-dropzone" id="upload-dropzone">
+          <input type="file" id="excel-file-input" accept=".xlsx, .xls" style="display: none;">
+          <div class="dropzone-icon">📁</div>
+          <h3 class="dropzone-title">Drag & Drop your Excel Workbook here</h3>
+          <p class="dropzone-subtitle">Supports .xlsx and .xls formats (Maximum 25MB)</p>
+          <button class="btn btn-primary" id="btn-browse-file">Browse Local File</button>
+        </div>
+
+        <!-- Configuration Panel (Appears after file parsed) -->
+        <div class="config-panel" id="config-panel">
+          <div class="file-meta-bar">
+            <div class="file-meta-left">
+              <span style="font-size: 1.5rem;">📊</span>
+              <div>
+                <div class="file-meta-name" id="meta-filename">Report.xlsx</div>
+                <div class="file-meta-details" id="meta-stats">Inspecting workbook structure...</div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-change-file">Replace File</button>
+          </div>
+
+          <!-- Workbook Inspection Summary & Data-Quality Warnings Box -->
+          <div class="inspection-summary-box" id="inspection-summary-box">
+            <div class="inspection-summary-header">
+              <span class="inspection-summary-title">🔍 Workbook Intelligence & Schema Discovery</span>
+              <span class="inspection-summary-meta" id="inspection-sheet-stats"></span>
+            </div>
+            <div class="detected-categories-row" id="detected-categories-badges">
+              <!-- Populated dynamically with detected category badges -->
+            </div>
+            <div class="quality-warnings-box" id="quality-warnings-list" style="display: none;">
+              <!-- Populated dynamically when missing cells, duplicates, or anomalies are detected -->
+            </div>
+          </div>
+
+          <!-- Sheet Selection Tabs & Multi-Sheet Checkbox -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <label class="form-label" style="margin-bottom: 0;">Select Active Worksheet</label>
+              <label class="checkbox-inline-label" for="chk-all-sheets">
+                <input type="checkbox" id="chk-all-sheets">
+                <span>Include All Non-Empty Worksheets in Analysis &amp; Presentation</span>
+              </label>
+            </div>
+            <div class="sheet-tabs" id="sheet-tabs-container"></div>
+          </div>
+
+          <!-- Presentation Title Customization -->
+          <div class="form-group">
+            <label class="form-label" for="input-custom-title">Presentation Title</label>
+            <input type="text" id="input-custom-title" class="form-control" placeholder="Inferred automatically from dataset">
+            <div class="form-help">Appears on the opening cover slide along with extracted reporting cycle and metadata.</div>
+          </div>
+
+          <!-- Presentation Detail Mode Selector -->
+          <div class="form-group">
+            <label class="form-label">Presentation Detail &amp; Information Preservation Mode</label>
+            <div class="detail-mode-grid" id="detail-mode-options">
+              <div class="detail-mode-card active" data-detail="summary">
+                <div class="detail-mode-header">
+                  <span class="detail-mode-icon">⚡</span>
+                  <span class="detail-mode-title">Management Summary</span>
+                  <span class="detail-mode-badge">Executive</span>
+                </div>
+                <div class="detail-mode-desc">
+                  Concise executive KPIs, native visual charts, top rankings, and strategic highlights.
+                </div>
+              </div>
+              <div class="detail-mode-card" data-detail="complete">
+                <div class="detail-mode-header">
+                  <span class="detail-mode-icon">🛡️</span>
+                  <span class="detail-mode-title">Complete Data Preservation (Full Tables &amp; Details)</span>
+                  <span class="detail-mode-badge">100% Fidelity</span>
+                </div>
+                <div class="detail-mode-desc">
+                  Preserves complete Excel rows in paginated slide tables, plus Origin → Transit → Destination flows and operational remarks.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide Count Selector (Auto Adaptive + 2 to 6 Slides) -->
+          <div class="slide-count-group">
+            <label class="form-label">Presentation Length &amp; Depth (16:9 Widescreen)</label>
+            <div class="slide-count-options" id="slide-count-options">
+              <div class="slide-count-btn" data-slides="0">
+                <div class="slide-count-number">Auto</div>
+                <div class="slide-count-desc">Smart 5–6 Slides (Zero Hallucination)</div>
+              </div>
+              <div class="slide-count-btn" data-slides="2">
+                <div class="slide-count-number">2</div>
+                <div class="slide-count-desc">Executive Brief (Title + KPIs)</div>
+              </div>
+              <div class="slide-count-btn" data-slides="3">
+                <div class="slide-count-number">3</div>
+                <div class="slide-count-desc">Core Operations + Closing</div>
+              </div>
+              <div class="slide-count-btn active" data-slides="4">
+                <div class="slide-count-number">4</div>
+                <div class="slide-count-desc">Standard Review (Recommended)</div>
+              </div>
+              <div class="slide-count-btn" data-slides="5">
+                <div class="slide-count-number">5</div>
+                <div class="slide-count-desc">Deep-Dive (Market + Corridors)</div>
+              </div>
+              <div class="slide-count-btn" data-slides="6">
+                <div class="slide-count-number">6</div>
+                <div class="slide-count-desc">Full Operations Matrix</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User-Controlled Content Checkboxes -->
+          <div class="form-group">
+            <label class="form-label">Slide Content &amp; Visual Components</label>
+            <div class="content-options-grid">
+              <label class="content-option-item" for="chk-include-charts">
+                <input type="checkbox" id="chk-include-charts" checked>
+                <div>
+                  <div class="content-option-title">Include Native Charts &amp; Summary Tables</div>
+                  <div class="content-option-sub">Editable column, bar, line, and doughnut charts with data tables</div>
+                </div>
+              </label>
+              <label class="content-option-item" for="chk-include-routing">
+                <input type="checkbox" id="chk-include-routing" checked>
+                <div>
+                  <div class="content-option-title">Include Origin → Transit → Destination Flow Diagrams</div>
+                  <div class="content-option-sub">Visual corridor flow cards for detected routing and hub legs</div>
+                </div>
+              </label>
+              <label class="content-option-item" for="chk-include-remarks">
+                <input type="checkbox" id="chk-include-remarks" checked>
+                <div>
+                  <div class="content-option-title">Include Operational Remarks, Exceptions &amp; Special Conditions</div>
+                  <div class="content-option-sub">Dedicated callouts for customs holds, delays, notes, and comments</div>
+                </div>
+              </label>
+              <label class="content-option-item" for="chk-include-full-tables">
+                <input type="checkbox" id="chk-include-full-tables">
+                <div>
+                  <div class="content-option-title">Embed Complete Source Data Tables Across Slides (Paginated)</div>
+                  <div class="content-option-sub">Automatically splits full worksheet records across clean 16:9 tables</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+            <button class="btn btn-outline" id="btn-preview-plan">Preview Slide Structure</button>
+            <button class="btn btn-primary btn-lg" id="btn-generate-presentation">Generate Presentation &amp; Formatted Excel</button>
+          </div>
+        </div>
+
+        <!-- Dual Output Download Bar & Validation Report Card -->
+        <div class="generation-results-card" id="generation-results-card" style="display: none;">
+          <div class="results-banner">
+            <div class="results-banner-left">
+              <span class="results-check-icon">✅</span>
+              <div>
+                <h3 class="results-title" id="results-pres-title">Outputs Ready for Download</h3>
+                <p class="results-subtitle" id="results-pres-subtitle">Verified PowerPoint deck and formatted Excel workbook compiled with 100% data fidelity.</p>
+              </div>
+            </div>
+            <div class="results-download-actions" style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+              <a href="#" class="btn btn-primary" id="btn-download-pptx" download>
+                📥 Download PowerPoint (.pptx)
+              </a>
+              <a href="#" class="btn btn-outline-gold" id="btn-download-xlsx" download style="background:#0f172a; color:#ffffff; border-color:#f97316;">
+                📊 Download Formatted Excel (.xlsx)
+              </a>
+              <button type="button" class="btn btn-outline btn-danger-hover" id="btn-cancel-delete-deck" title="Delete and remove this generated presentation from disk">
+                🗑️ Cancel &amp; Delete Deck
+              </button>
+              <button type="button" class="btn btn-outline" id="btn-dismiss-results" title="Dismiss this summary and upload a new workbook">
+                ✖️ Clear &amp; New
+              </button>
+            </div>
+          </div>
+
+          <!-- Cross-Validation & Accuracy Report -->
+          <div class="validation-report-box" id="validation-report-container">
+            <!-- Populated dynamically from validation_report -->
+          </div>
+        </div>
+
+        <!-- Processing Stepper Animation -->
+        <div class="progress-stepper" id="progress-stepper">
+          <div class="spinner"></div>
+          <div class="stepper-status" id="stepper-title">Synthesizing Presentation...</div>
+          <div class="stepper-subtitle" id="stepper-desc">Extracting verified metrics and formatting executive slides</div>
+        </div>
+      </div>
+
+      <!-- Recent Generation History -->
+      <div class="card" id="history-section">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size: 1.1rem;">Your Generated Presentations</h3>
+          <button class="btn btn-outline btn-sm" id="btn-refresh-history">Refresh</button>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Presentation Title</th>
+                <th>Slides</th>
+                <th>Created At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 1.5rem;">
+                  No presentations generated yet in this session.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: ADMINISTRATOR DASHBOARD ================= -->
+    <section id="view-admin" class="view-section" style="display: none;">
+      <!-- Corporate Template Upload Card -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">PowerPoint Master Template Override (.pptx)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+              Optional: Upload a custom `.pptx` master template if needed. By default, the generator compiles slides with the pre-configured corporate presentation layout, cover logo, and per-slide watermark.
+            </p>
+          </div>
+          <div id="template-status-badge">
+            <span class="badge" style="background:var(--bg-canvas); color:var(--text-secondary);">Checking status...</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <input type="file" id="corporate-template-input" accept=".pptx" style="display: none;">
+          <button class="btn btn-primary btn-sm" id="btn-upload-template">Upload Custom Template (.pptx)</button>
+          <button class="btn btn-outline btn-sm" id="btn-remove-template" style="display: none;">Revert to Built-In Corporate Design</button>
+          <span id="template-filename-label" style="font-size: 0.85rem; color: var(--text-secondary);"></span>
+        </div>
+      </div>
+
+      <!-- Access Request Approvals Card -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Patel'Spark Access Request Approvals</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+              Review pending access requests submitted by prospective users.
+            </p>
+          </div>
+          <button class="btn btn-outline btn-sm" id="btn-refresh-admin">Refresh Queue</button>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Candidate Name</th>
+                <th>Email</th>
+                <th>Department / Team</th>
+                <th>Business Justification</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-requests-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 1.5rem;">
+                  Loading pending requests...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Authorized Users Section -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Authorized Patel'Spark Users</h2>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Account Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 1.5rem;">
+                  Loading users...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Request Access -->
+  <div class="modal-overlay" id="modal-request-access">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <img src="/assets/patelspark_banner.png" alt="Patel'Spark" style="height: 28px; width: auto; border-radius: 4px;">
+          <div class="modal-title">Request Patel'Spark Access</div>
+        </div>
+        <button class="modal-close" data-close-modal="modal-request-access">&times;</button>
+      </div>
+      <form id="form-request-access">
+        <div class="modal-body">
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Access to Patel'Spark is managed via administrator approval. Submit your details below to request access.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="req-name">Full Name *</label>
+            <input type="text" id="req-name" class="form-control" required placeholder="e.g. Alex Morgan">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="req-email">Work Email *</label>
+            <input type="email" id="req-email" class="form-control" required placeholder="e.g. amorgan@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="req-dept">Department / Operations Team</label>
+            <input type="text" id="req-dept" class="form-control" placeholder="e.g. Operations & Analytics">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="req-reason">Business Justification *</label>
+            <textarea id="req-reason" class="form-control" required placeholder="Explain your operational presentation requirements..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-request-access">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-request">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: User Sign In -->
+  <div class="modal-overlay" id="modal-login">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <img src="/assets/patelspark_banner.png" alt="Patel'Spark" style="height: 28px; width: auto; border-radius: 4px;">
+          <div class="modal-title">Sign In to Patel'Spark</div>
+        </div>
+        <button class="modal-close" data-close-modal="modal-login">&times;</button>
+      </div>
+      <form id="form-login">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" required placeholder="admin@patelspark.internal">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" required placeholder="••••••••">
+          </div>
+          <!-- Quick Testing Shortcut Pills -->
+          <div style="background-color: var(--bg-canvas); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px dashed var(--border-subtle); margin-top: 1rem;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.35rem;">TEST CREDENTIAL SHORTCUT:</div>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-fill-admin-creds" style="font-size: 0.75rem;">
+              Fill Master Admin Credentials
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-open-activation-from-login">Have an Invite Token?</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-login">Sign In</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Account Activation (via Invite Token) -->
+  <div class="modal-overlay" id="modal-activate">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Activate Approved Account</div>
+        <button class="modal-close" data-close-modal="modal-activate">&times;</button>
+      </div>
+      <form id="form-activate">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="act-token">Invitation Token *</label>
+            <input type="text" id="act-token" class="form-control" required placeholder="Paste the token generated by your admin">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="act-name">Full Name (Optional)</label>
+            <input type="text" id="act-name" class="form-control" placeholder="Confirm your name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="act-password">Set Secure Password *</label>
+            <input type="password" id="act-password" class="form-control" required minlength="8" placeholder="Minimum 8 characters">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-activate">Cancel</button>
+          <button type="submit" class="btn btn-primary">Activate Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Slide Presentation Preview -->
+  <div class="modal-overlay" id="modal-preview">
+    <div class="modal-content preview-modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="preview-modal-title">Presentation Blueprint Preview (16:9)</div>
+        <button class="modal-close" data-close-modal="modal-preview">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
+          Inspect slide structure, Origin → Transit → Destination flows, operational remarks, and verified Excel metrics before compiling outputs.
+        </p>
+        <!-- Cross-Validation Summary in Preview Modal -->
+        <div id="preview-validation-summary" class="preview-validation-summary" style="display: none;"></div>
+        <div class="slide-carousel" id="preview-slides-carousel">
+          <!-- Slide Preview Cards populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal="modal-preview">Close Preview</button>
+        <button type="button" class="btn btn-primary btn-lg" id="btn-download-from-preview">Generate &amp; Download Outputs (.pptx + .xlsx)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Gamified Achievements -->
+  <div class="modal-overlay" id="modal-achievements">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.5rem;">🏆</span>
+          <div class="modal-title">Analyst Milestones &amp; Trophies</div>
+        </div>
+        <button class="modal-close" data-close-modal="modal-achievements">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">
+          Earn Analyst XP points and unlock elite badges by ingesting diverse workbooks, synthesizing decks, and validating deterministic figures.
+        </p>
+        <div class="achievements-grid" id="achievements-grid-container">
+          <!-- Populated dynamically by Gamification.renderAchievementsModal() -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-close-modal="modal-achievements">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Step-by-Step User Guide -->
+  <div class="modal-overlay" id="modal-user-guide">
+    <div class="modal-content" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <img src="/assets/patelspark_banner.png" alt="Patel'Spark" style="height:32px; width:auto; border-radius:4px;">
+          <div>
+            <div class="modal-title">Patel'Spark User Guide</div>
+            <div style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">STEP-BY-STEP OPERATION MANUAL</div>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modal-user-guide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+          Welcome to Patel'Spark! Follow this step-by-step walkthrough to transform any business Excel workbook into high-impact, management-ready PowerPoint presentations and formatted audit workbooks.
+        </p>
+
+        <div class="guide-steps-list">
+          <!-- Step 1 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Authentication &amp; Platform Access</h4>
+              <p class="guide-step-desc">
+                Click <strong>"Sign In"</strong> in the top navigation bar. For demonstration and administration, click the <em>"Fill Master Admin Credentials"</em> shortcut button to instantly populate <code>admin@patelspark.internal</code> and access the dashboard.
+              </p>
+              <div class="guide-callout">
+                💡 <strong>New Users:</strong> Click <em>"Request Access"</em> to submit your operational credentials. Once approved by the administrator, activate your account via the invitation token.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Upload Any Excel Workbook (.xlsx / .xls)</h4>
+              <p class="guide-step-desc">
+                Drag and drop your spreadsheet into the dropzone or click <em>"Browse Local File"</em>. You can also click <em>"Load Global Express Sample"</em> or <em>"Load Route Logistics Sample"</em> for instant real-world test data.
+              </p>
+              <div class="guide-callout">
+                🔍 <strong>Schema-Agnostic:</strong> Patel'Spark automatically detects multiple worksheets, merged cells, header rows, numerical metrics, origin-transit-destination lanes, flight schedules, customer accounts, and operational remarks!
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Select Presentation Depth &amp; Customization Options</h4>
+              <p class="guide-step-desc">
+                Choose your desired presentation style:
+              </p>
+              <ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Presentation Detail Mode:</strong> Select <em>"Management Summary"</em> for executive 2–6 slide overviews, or <em>"Complete Data Preservation"</em> to embed every spreadsheet row across paginated 10-row slide tables without font compression.</li>
+                <li><strong>Slide Count:</strong> Choose <em>"Auto (Adaptive)"</em> (the engine determines the optimal length based on your data volume) or select a fixed length of 2, 3, 4, 5, or 6 slides.</li>
+                <li><strong>Content Toggles:</strong> Enable/disable native charts, routing flow diagrams (Origin ➔ Transit ➔ Destination), and operational exceptions/remarks.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">4</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Preview 16:9 Slides &amp; Inspect Data Integrity</h4>
+              <p class="guide-step-desc">
+                Click <strong>"Preview Slide Structure"</strong> to open the interactive thumbnail carousel. Verify slide sequence, verified metrics, routing flow diagrams, and data provenance badges (<em>Original Source Data</em> vs. <em>Deterministic Calculation</em>).
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">5</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Generate, Validate &amp; Download Dual Outputs</h4>
+              <p class="guide-step-desc">
+                Click <strong>"Generate Presentation &amp; Formatted Excel"</strong>. Watch the animated synthesis timeline, then download both files:
+              </p>
+              <ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>PowerPoint (.pptx):</strong> Approved 16:9 corporate presentation with official logos, per-slide watermarks, and native charts.</li>
+                <li><strong>Formatted Excel (.xlsx):</strong> Retains 100% of your original worksheets and cell values unaltered with corporate styling and an Executive Summary audit sheet.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="guide-step-card">
+            <div class="guide-step-num">6</div>
+            <div class="guide-step-content">
+              <h4 class="guide-step-title">Cancel or Delete Generated Decks Anytime</h4>
+              <p class="guide-step-desc">
+                After downloading, click <strong>"🗑️ Cancel &amp; Delete Deck"</strong> in the results banner or use the <em>"🗑️ Delete"</em> button in the generation history table to permanently remove files and history records from storage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-close-modal="modal-user-guide">Got It, Let's Build!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <img src="/assets/patelspark_banner.png" alt="Patel'Spark Logo" class="footer-logo-img">
+        <span>Patel'Spark &copy; 2026. Automation Slide Generator.</span>
+      </div>
+      <div class="footer-tagline">
+        <span>Automated Excel-to-PowerPoint Intelligence</span>
+        <span class="author-radium-badge">⚡ Made by Anas S Patel</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/app.js?v=2026.7"></script>
+  <script src="/js/auth.js?v=2026.7"></script>
+  <script src="/js/admin.js?v=2026.7"></script>
+  <script src="/js/upload.js?v=2026.7"></script>
+  <script src="/js/preview.js?v=2026.7"></script>
+  <script src="/js/gamification.js?v=2026.7"></script>
+</body>
+</html>
