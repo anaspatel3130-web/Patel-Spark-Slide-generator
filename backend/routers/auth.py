@@ -6,7 +6,7 @@ Authentication router: Request Access, Login, Profile, and Account Activation.
 
 from datetime import datetime
 import secrets
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, BackgroundTasks, status
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -26,15 +26,22 @@ from backend.security import (
     get_current_user,
     check_rate_limit
 )
+from backend.services.email_service import EmailNotificationService
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
 @router.post("/request-access", response_model=AccessRequestOut, status_code=status.HTTP_201_CREATED)
-def submit_access_request(req_in: AccessRequestCreate, request: Request, db: Session = Depends(get_db)):
+def submit_access_request(
+    req_in: AccessRequestCreate,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
     """
     Public endpoint: Prospective users submit a request for platform access.
     Saved with PENDING status for administrator review.
+    Dispatches real-time email notification to anaspatel3130@gmail.com.
     """
     client_ip = request.client.host if request.client else "local"
     check_rate_limit(f"req_access:{client_ip}", max_requests=25, window_seconds=60)
@@ -65,6 +72,18 @@ def submit_access_request(req_in: AccessRequestCreate, request: Request, db: Ses
     db.add(new_req)
     db.commit()
     db.refresh(new_req)
+
+    # Dispatch email notification to platform administrator (anaspatel3130@gmail.com)
+    req_dict = {
+        "id": new_req.id,
+        "name": new_req.name,
+        "email": new_req.email,
+        "department": new_req.department,
+        "reason": new_req.reason,
+        "created_at": new_req.created_at,
+    }
+    background_tasks.add_task(EmailNotificationService.send_access_request_alert, req_dict)
+
     return new_req
 
 

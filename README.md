@@ -86,7 +86,9 @@
 - **Interactive Step-by-Step User Guide**: Accessible both inline on the landing page and via the `📖 How-To Guide` modal from any screen.
 - **Instant Cancel & Delete**: Users can permanently delete generated `.pptx` and `.xlsx` files from disk and database history with 1 click right after download or from the history table.
 
-### 4. Enterprise Security Hardening (`backend/security.py` & `backend/main.py`)
+### 4. Enterprise Security Hardening & Admin Email Alerts (`backend/security.py`, `backend/services/email_service.py`)
+- **Real-Time Admin Email Alerts**: When a prospective user fills out the "Request Access" form, an automated notification is dispatched to `anaspatel3130@gmail.com` containing the applicant's name, email, department, justification reason, and direct link to approve/reject in the admin dashboard.
+- **Dual Delivery Engine**: Supports standard SMTP (e.g. Gmail App Passwords on `smtp.gmail.com:587`) and Resend REST API, running asynchronously in FastAPI `BackgroundTasks` so the user's signup is instant and never blocked by network latency.
 - **Password Cryptography**: Salted `PBKDF2-HMAC-SHA256` with 100,000 iterations and constant-time verification (`secrets.compare_digest`).
 - **Role-Based Access Control (RBAC)**: Signed JWT Bearer authentication with Administrator approval workflows and single-use invitation tokens.
 - **Rate Limiting & OWASP Headers**: Sliding-window rate limiter on `/api/auth/login` and `/api/auth/request-access`, plus `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block`, and `Referrer-Policy`.
@@ -130,6 +132,22 @@ This repository includes `Dockerfile`, `render.yaml`, `Procfile`, and `.env.exam
    docker build -t patelspark-slide-generator .
    docker run -p 8000:8000 patelspark-slide-generator
    ```
+
+### 📧 Email Notification Setup (Access Requests)
+To receive real-time email notifications whenever a prospective user requests access:
+1. Recipient defaults to **`anaspatel3130@gmail.com`** (configurable via `NOTIFICATION_EMAIL`).
+2. To send live emails using **Gmail**:
+   - Generate a 16-character [Google App Password](https://myaccount.google.com/apppasswords).
+   - Set environment variables:
+     ```env
+     NOTIFICATION_EMAIL=anaspatel3130@gmail.com
+     SMTP_HOST=smtp.gmail.com
+     SMTP_PORT=587
+     SMTP_USER=your_gmail_address@gmail.com
+     SMTP_PASSWORD=your_16_char_app_password
+     SMTP_TLS=true
+     ```
+3. Alternatively, set `RESEND_API_KEY=re_xxx` for serverless API-based delivery.
 
 ---
 

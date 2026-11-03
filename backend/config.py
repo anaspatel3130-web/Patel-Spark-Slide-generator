@@ -51,6 +51,17 @@ DEFAULT_ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@patelspark.internal")
 DEFAULT_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "PatelSpark2026!Admin")
 DEFAULT_ADMIN_NAME = "Patel'Spark Administrator"
 
+# Email Notification Settings (Alerts sent when user requests access)
+NOTIFICATION_EMAIL = os.getenv("NOTIFICATION_EMAIL", "anaspatel3130@gmail.com")
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "")
+SMTP_TLS = os.getenv("SMTP_TLS", "true").lower() in ("true", "1", "yes")
+SMTP_SSL = os.getenv("SMTP_SSL", "false").lower() in ("true", "1", "yes")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+
 # File Upload Constraints
 MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024  # 25 Megabytes
 ALLOWED_EXTENSIONS = {".xlsx", ".xls"}

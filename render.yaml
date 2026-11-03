@@ -13,3 +13,5 @@ services:
         value: admin@patelspark.internal
       - key: ADMIN_PASSWORD
         value: PatelSpark2026!Admin
+      - key: NOTIFICATION_EMAIL
+        value: anaspatel3130@gmail.com
