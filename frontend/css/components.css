@@ -302,3 +302,114 @@ textarea.form-control {
     opacity: 1;
   }
 }
+
+/* ----------------- Social Sign-In & Direct Owner Access ----------------- */
+.social-login-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-social:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-social-owner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #fbbf24 !important;
+  border: 1.5px solid #f59e0b;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25);
+  font-weight: 700;
+}
+
+.btn-social-owner:hover {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+}
+
+.btn-social-google:hover {
+  border-color: #ea4335;
+  background-color: rgba(234, 67, 53, 0.08);
+}
+
+.btn-social-github:hover {
+  border-color: #333333;
+  background-color: rgba(36, 41, 46, 0.12);
+}
+
+.btn-social-guest {
+  background-color: rgba(249, 115, 22, 0.06);
+  border-color: rgba(249, 115, 22, 0.35);
+  color: var(--color-accent);
+}
+
+.btn-social-guest:hover {
+  background-color: rgba(249, 115, 22, 0.14);
+  border-color: var(--color-accent);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.15rem 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.auth-divider span {
+  padding: 0 0.75rem;
+}
+
+.quick-helpers-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.btn-helper-pill {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface-elevated);
+  border: 1px dashed var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-helper-pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}

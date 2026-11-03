@@ -33,10 +33,11 @@ from backend.routers.generator import router as generator_router
 
 def seed_administrator():
     """
-    Ensures a master administrator account exists on platform boot.
+    Ensures master administrator and platform owner accounts exist on platform boot.
     """
     db: Session = SessionLocal()
     try:
+        # 1. Internal Master Admin
         admin = db.query(User).filter(User.email == DEFAULT_ADMIN_EMAIL).first()
         if not admin:
             admin = User(
@@ -49,6 +50,26 @@ def seed_administrator():
             db.add(admin)
             db.commit()
             print(f"[BOOTSTRAP] Master Admin initialized: {DEFAULT_ADMIN_EMAIL}")
+
+        # 2. Platform Owner: Anas S Patel (anaspatel3130@gmail.com)
+        owner_email = "anaspatel3130@gmail.com"
+        owner = db.query(User).filter(User.email == owner_email).first()
+        if not owner:
+            owner = User(
+                email=owner_email,
+                full_name="Anas S Patel (Owner)",
+                hashed_password=hash_password("PatelSpark2026!"),
+                role="admin",
+                is_active=True
+            )
+            db.add(owner)
+            db.commit()
+            print(f"[BOOTSTRAP] Platform Owner initialized: {owner_email}")
+        else:
+            if owner.role != "admin" or not owner.is_active:
+                owner.role = "admin"
+                owner.is_active = True
+                db.commit()
     finally:
         db.close()
 

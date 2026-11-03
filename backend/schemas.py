@@ -32,13 +32,18 @@ class UserOut(BaseModel):
     class Config:
         from_attributes = True
 
-# ----------------- Access Request Schemas -----------------
+# ----------------- Access Request & Social Auth Schemas -----------------
 
 class AccessRequestCreate(BaseModel):
-    name: str = Field(..., min_length=2, max_length=100)
+    name: str = Field(default="Prospective Analyst", max_length=100)
     email: EmailStr
     department: Optional[str] = Field(None, max_length=100)
-    reason: str = Field(..., min_length=10, max_length=1000)
+    reason: Optional[str] = Field(default="Operational slide deck generation", max_length=1000)
+
+class SocialLoginRequest(BaseModel):
+    provider: str = Field(default="guest")  # "google", "github", "facebook", "guest", "owner"
+    email: Optional[EmailStr] = None
+    name: Optional[str] = None
 
 class AccessRequestOut(BaseModel):
     id: int

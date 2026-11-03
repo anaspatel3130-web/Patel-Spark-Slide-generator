@@ -37,6 +37,7 @@
         
         <!-- Guest Controls -->
         <div id="nav-guest-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+          <button class="btn btn-outline-gold btn-sm btn-trigger-owner-access" title="Direct Master Access for Anas S Patel (anaspatel3130@gmail.com)">⚡ Owner Access</button>
           <button class="btn btn-outline-gold btn-sm" id="btn-open-request-access">Request Access</button>
           <button class="btn btn-primary btn-sm" id="btn-open-login">Sign In</button>
         </div>
@@ -69,9 +70,10 @@
               Upload supported Excel workbooks, analyse business data, discover key insights and generate polished PowerPoint presentations automatically.
             </p>
             <div class="hero-actions">
-              <button class="btn btn-primary btn-lg" id="hero-btn-request">Request Access</button>
-              <button class="btn btn-secondary btn-lg" id="hero-btn-login">Sign In to Dashboard</button>
-              <button class="btn btn-outline btn-lg" id="hero-btn-guide" onclick="if(window.App){App.openGuide(event);}" style="border-color: rgba(255,255,255,0.4); color: #ffffff;">📖 Step-by-Step Guide</button>
+              <button class="btn btn-primary btn-lg btn-trigger-owner-access" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fbbf24; border: 1.5px solid #f59e0b; box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);">⚡ Direct Owner Access</button>
+              <button class="btn btn-secondary btn-lg" id="hero-btn-login">Sign In / Social Login</button>
+              <button class="btn btn-outline btn-lg" id="hero-btn-guest-direct" onclick="if(window.Auth){Auth.handleSocialLogin('guest');}" style="border-color: rgba(255,255,255,0.4); color: #ffffff;">🚀 Continue as Guest</button>
+              <button class="btn btn-outline btn-lg" id="hero-btn-guide" onclick="if(window.App){App.openGuide(event);}" style="border-color: rgba(255,255,255,0.25); color: #ffffff;">📖 User Guide</button>
             </div>
           </div>
 
@@ -544,6 +546,10 @@
       </div>
       <form id="form-request-access">
         <div class="modal-body">
+          <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid #f59e0b; border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+            <span>Are you <strong>Anas S Patel</strong> (Platform Owner)?</span>
+            <button type="button" class="btn btn-sm btn-primary btn-trigger-owner-access">⚡ Direct Owner Access</button>
+          </div>
           <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
             Access to Patel'Spark is managed via administrator approval. Submit your details below to request access.
           </p>
@@ -572,9 +578,9 @@
     </div>
   </div>
 
-  <!-- Modal: User Sign In -->
+  <!-- Modal: User Sign In & Social Auth -->
   <div class="modal-overlay" id="modal-login">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 480px;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 0.6rem;">
           <img src="/assets/patelspark_banner.png" alt="Patel'Spark" style="height: 28px; width: auto; border-radius: 4px;">
@@ -582,8 +588,34 @@
         </div>
         <button class="modal-close" data-close-modal="modal-login">&times;</button>
       </div>
-      <form id="form-login">
-        <div class="modal-body">
+      <div class="modal-body" style="padding-bottom: 1.25rem;">
+        <!-- 1. Direct Owner Access for Anas S Patel -->
+        <button type="button" class="btn-social btn-social-owner btn-trigger-owner-access" style="margin-bottom: 0.75rem;">
+          <span>⚡</span>
+          <span>Direct Owner Access (anaspatel3130@gmail.com)</span>
+        </button>
+
+        <!-- 2. 1-Click Social Sign-in Options -->
+        <div class="social-login-grid">
+          <button type="button" class="btn-social btn-social-google" id="btn-social-google">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.5.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15s.7 5.3 1.9 7.7l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 17C3.7 20.7 7.5 24 12 24z"/></svg>
+            <span>Continue with Google</span>
+          </button>
+          <button type="button" class="btn-social btn-social-github" id="btn-social-github">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span>Continue with GitHub</span>
+          </button>
+          <button type="button" class="btn-social btn-social-guest" id="btn-social-guest">
+            <span>🚀</span>
+            <span>Instant Access (Continue as Guest)</span>
+          </button>
+        </div>
+
+        <div class="auth-divider">
+          <span>or sign in with password</span>
+        </div>
+
+        <form id="form-login">
           <div class="form-group">
             <label class="form-label" for="login-email">Email Address</label>
             <input type="email" id="login-email" class="form-control" required placeholder="name@company.com">
@@ -592,15 +624,18 @@
             <label class="form-label" for="login-password">Password</label>
             <input type="password" id="login-password" class="form-control" required placeholder="••••••••">
           </div>
-          <div style="font-size: 0.78rem; color: var(--text-secondary); background-color: var(--bg-canvas); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-top: 0.75rem;">
-            🔒 Authorized users &amp; administrators only. Need an account? Click <strong>Request Access</strong> or activate an approved invitation token below.
+
+          <div class="quick-helpers-row">
+            <button type="button" class="btn-helper-pill" id="btn-fill-owner-creds">⚡ Fill Owner: anaspatel3130@gmail.com</button>
+            <button type="button" class="btn-helper-pill" id="btn-fill-admin-creds">🛡️ Fill Internal Admin</button>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline" id="btn-open-activation-from-login">Have an Invite Token?</button>
-          <button type="submit" class="btn btn-primary" id="btn-submit-login">Sign In</button>
-        </div>
-      </form>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+            <button type="button" class="btn btn-outline btn-sm" id="btn-open-activation-from-login">Have Invite Token?</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-login">Sign In</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -807,11 +842,11 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="/js/app.js?v=2026.8"></script>
-  <script src="/js/auth.js?v=2026.8"></script>
-  <script src="/js/admin.js?v=2026.8"></script>
-  <script src="/js/upload.js?v=2026.8"></script>
-  <script src="/js/preview.js?v=2026.8"></script>
-  <script src="/js/gamification.js?v=2026.8"></script>
+  <script src="/js/app.js?v=2026.9"></script>
+  <script src="/js/auth.js?v=2026.9"></script>
+  <script src="/js/admin.js?v=2026.9"></script>
+  <script src="/js/upload.js?v=2026.9"></script>
+  <script src="/js/preview.js?v=2026.9"></script>
+  <script src="/js/gamification.js?v=2026.9"></script>
 </body>
 </html>

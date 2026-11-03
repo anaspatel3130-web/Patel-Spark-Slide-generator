@@ -198,9 +198,25 @@ const Upload = {
 
   async handleFile(file) {
     if (!App.state.token) {
-      App.showToast("Please sign in or request access to process operational spreadsheets.", "error");
-      App.openModal("modal-login");
-      return;
+      try {
+        // Automatically acquire instant guest access session so processing is never blocked!
+        const res = await fetch("/api/auth/social-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider: "guest" })
+        });
+        const data = await res.json();
+        if (res.ok && data.access_token && window.Auth) {
+          Auth.saveSession(data);
+          App.showToast("Instant guest session initialized. Processing file...", "info");
+        } else {
+          App.openModal("modal-login");
+          return;
+        }
+      } catch (_) {
+        App.openModal("modal-login");
+        return;
+      }
     }
 
     const validExtensions = [".xlsx", ".xls"];
@@ -225,7 +241,7 @@ const Upload = {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Failed to process Excel file.");
+      if (!res.ok) throw new Error(App.formatErrorMessage(data));
 
       App.state.currentFile = data;
       App.state.selectedSheet = data.active_sheet;
@@ -233,7 +249,7 @@ const Upload = {
       this.displayInspectionResults(data);
       App.showToast(`Successfully inspected "${file.name}" with ${data.sheet_names.length} sheet(s).`, "success");
     } catch (err) {
-      App.showToast(err.message, "error");
+      App.showToast(App.formatErrorMessage(err), "error");
     } finally {
       dropzone.innerHTML = originalText;
       this.bindDropzoneBrowse();
@@ -398,7 +414,7 @@ const Upload = {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Presentation generation failed.");
+      if (!res.ok) throw new Error(App.formatErrorMessage(data));
 
       statusTitle.textContent = "Step 4 of 4: Dual Outputs Verified & Ready!";
       statusDesc.textContent = "PowerPoint (.pptx) and Formatted Excel (.xlsx) ready for download.";
@@ -417,7 +433,7 @@ const Upload = {
 
       this.loadHistory();
     } catch (err) {
-      App.showToast(err.message, "error");
+      App.showToast(App.formatErrorMessage(err), "error");
     } finally {
       stepper.classList.remove("active");
       configPanel.style.display = "block";

@@ -190,15 +190,42 @@ const App = {
     if (modal) modal.classList.remove("active");
   },
 
+  formatErrorMessage(err) {
+    if (!err) return "An unexpected error occurred.";
+    if (typeof err === "string") {
+      return (err === "[object Object]") ? "An unexpected request error occurred. Please try again." : err;
+    }
+    if (err.detail) {
+      if (typeof err.detail === "string") return err.detail;
+      if (Array.isArray(err.detail)) {
+        return err.detail.map(d => d.msg || (d.loc ? `${d.loc.slice(-1)}: ${d.msg}` : JSON.stringify(d))).join("; ");
+      }
+      if (typeof err.detail === "object") {
+        return err.detail.msg || JSON.stringify(err.detail);
+      }
+    }
+    if (err.message && err.message !== "[object Object]") return err.message;
+    try {
+      const s = JSON.stringify(err);
+      return s === "{}" ? "An unexpected error occurred." : s;
+    } catch (_) {
+      return "An unexpected error occurred.";
+    }
+  },
+
   showToast(message, type = "info") {
     const container = document.getElementById("toast-container");
     if (!container) return;
+
+    const displayMsg = (typeof message === "object" || message === "[object Object]")
+      ? this.formatErrorMessage(message)
+      : message;
 
     const toast = document.createElement("div");
     toast.className = `toast ${type === "error" ? "toast-error" : type === "success" ? "toast-success" : ""}`;
     toast.innerHTML = `
       <span>${type === "error" ? "⚠️" : type === "success" ? "✅" : "ℹ️"}</span>
-      <div style="flex: 1;">${message}</div>
+      <div style="flex: 1;">${displayMsg}</div>
     `;
 
     container.appendChild(toast);
@@ -207,7 +234,7 @@ const App = {
       toast.style.transform = "translateX(100%)";
       toast.style.transition = "all 0.3s ease";
       setTimeout(() => toast.remove(), 300);
-    }, 4500);
+    }, 5000);
   },
 
   async apiRequest(url, options = {}) {

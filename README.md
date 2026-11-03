@@ -115,10 +115,18 @@ python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 
 Open **`http://127.0.0.1:8000`** in your browser.
 
-### Default Master Administrator Credentials
-- **Email:** `admin@patelspark.internal`
-- **Password:** `PatelSpark2026!Admin`
-*(Tip: Click the **"Fill Master Admin Credentials"** button inside the Sign-In modal for instant 1-click login).*
+### ⚡ Authentication & Access Options
+1. **Direct Owner Access (Anas S Patel)**:
+   - Click **"⚡ Direct Owner Access"** in the navigation bar or Sign-In modal for instant Super Administrator access without password entry.
+   - Alternatively, sign in with:
+     - **Email:** `anaspatel3130@gmail.com`
+     - **Password:** `PatelSpark2026!`
+2. **1-Click Social Sign-In**:
+   - **Google & GitHub**: Instant 1-click access without awaiting approval.
+   - **Continue as Guest**: Instant access directly to the presentation studio.
+3. **Internal Master Admin**:
+   - **Email:** `admin@patelspark.internal`
+   - **Password:** `PatelSpark2026!Admin`
 
 ---
 

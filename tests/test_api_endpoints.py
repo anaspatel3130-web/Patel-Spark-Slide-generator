@@ -43,6 +43,26 @@ def test_full_api_workflow():
         admin_headers = {"Authorization": f"Bearer {admin_token}"}
         print(" [OK] Master Admin Authentication")
 
+        # 2b. Direct Owner Access (anaspatel3130@gmail.com)
+        res_owner = client.post("/api/auth/direct-owner-access")
+        assert res_owner.status_code == 200, f"Owner direct access failed: {res_owner.text}"
+        owner_data = res_owner.json()
+        assert owner_data["email"] == "anaspatel3130@gmail.com"
+        assert owner_data["role"] == "admin"
+        assert "access_token" in owner_data
+        print(" [OK] Direct Owner Access (anaspatel3130@gmail.com)")
+
+        # 2c. Social Login (Google & Guest)
+        res_google = client.post("/api/auth/social-login", json={"provider": "google"})
+        assert res_google.status_code == 200
+        assert "access_token" in res_google.json()
+        print(" [OK] 1-Click Social Sign-in (Google)")
+
+        res_guest = client.post("/api/auth/social-login", json={"provider": "guest"})
+        assert res_guest.status_code == 200
+        assert "access_token" in res_guest.json()
+        print(" [OK] 1-Click Instant Guest Sign-in")
+
         # 3. Prospective User submits Access Request
         candidate_email = f"candidate.{uuid.uuid4().hex[:6]}@operations.internal"
         res = client.post("/api/auth/request-access", json={
